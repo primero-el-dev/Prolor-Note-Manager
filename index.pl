@@ -320,7 +320,7 @@ notes_action(Request) :-
                 ->  update_note_action(NoteId, Request)
                 ;   Method == delete
                 ->  delete_note_action(NoteId, Request)
-                ;   throw(http_exception('Method not allowed.', 404))
+                ;   throw(http_exception('Method not allowed.', 405))
                 )
             )
         ),
