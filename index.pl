@@ -48,11 +48,11 @@ logged_user_id(Id) :-
 server(Port) :-
     http_server(http_dispatch, [port(Port)]).
 
-:- http_handler('/login', login, [ methods([post]) ]).
-:- http_handler('/logout', logout, [ methods([post]) ]).
-:- http_handler('/registration', registration, [ methods([post]) ]).
+:- http_handler(root(.), render_index_view, [ method(get) ]).
+:- http_handler(root('login'), login, [ methods([post]) ]).
+:- http_handler(root('logout'), logout, [ methods([post]) ]).
+:- http_handler(root('registration'), registration, [ methods([post]) ]).
 :- http_handler(root('api/note'), notes_action, [ methods([get, post, put, delete]), prefix ]).
-:- http_handler('/', render_index_view, [ method(get) ]).
 
 
 
@@ -104,9 +104,9 @@ login(Request) :-
             (   not(user_is_logged) 
             ;   throw(http_exception('Forbidden.', 403))
             ),
-            % (   check_csrf(Request) 
-            % ;   throw(http_exception('Invalid CSRF token.', 400))
-            % ),
+            (   check_csrf(Request) 
+            ;   throw(http_exception('Invalid CSRF token.', 400))
+            ),
             (   http_read_json_dict(Request, Dict) 
             ;   throw(http_exception('Invalid content.', 400))
             ),
