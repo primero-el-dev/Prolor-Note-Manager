@@ -1,0 +1,29 @@
+CREATE TABLE "user" (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE token (
+    id SERIAL PRIMARY KEY,
+    value VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    expiry BIGINT NOT NULL,
+    user_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE note (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE
+);
+
+CREATE TABLE additional_parameter (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value VARCHAR(255) NOT NULL,
+    note_id INTEGER REFERENCES note(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES "user"(id) ON DELETE CASCADE
+);
